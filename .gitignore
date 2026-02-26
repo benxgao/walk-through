@@ -1,0 +1,43 @@
+.history/
+
+# AI copilots coding assistants
+.cursor/
+.continue/
+.windsurf/
+.aider*
+.clinerules
+.cursorrules
+.workbuddy-ai/
+
+.mailmap
+
+node_modules/
+
+# Build output
+packages/cli/dist/
+
+# Generated at build time from the repository root .sddio/ (ADR-005).
+# Never commit: the root .sddio/ is the single source of truth.
+packages/cli/templates/
+
+# Local packaging artefacts (npm pack)
+*.tgz
+
+# OS noise
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Editor noise
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Skill installs, if a tool puts one here. Its source is not this project's code.
+.agents/skills/
+
+# sddio's own observation log: local, private, deletable. Digests are copied into
+# a card's findings.md when a number is worth sharing; the raw log never is.
+.sddio/evals/
