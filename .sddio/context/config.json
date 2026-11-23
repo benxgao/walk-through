@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "reconcileCursor": {
+    "lastProcessedCommit": null
+  },
+  "hooks": [
+    {
+      "id": "flow-trail",
+      "kind": "external",
+      "events": [
+        "knowledge.reconcile"
+      ]
+    }
+  ]
+}

@@ -1,3 +1,4 @@
+# Editor history, kept by the editor and not by git.
 .history/
 
 # AI copilots coding assistants
@@ -12,13 +13,6 @@
 .mailmap
 
 node_modules/
-
-# Build output
-packages/cli/dist/
-
-# Generated at build time from the repository root .sddio/ (ADR-005).
-# Never commit: the root .sddio/ is the single source of truth.
-packages/cli/templates/
 
 # Local packaging artefacts (npm pack)
 *.tgz
@@ -35,7 +29,7 @@ Desktop.ini
 *.swo
 *~
 
-# Skill installs, if a tool puts one here. Its source is not this project's code.
+# Skill installs, if a tool puts one here. A skill's source is a dependency, not this project's code.
 .agents/skills/
 
 # sddio's own observation log: local, private, deletable. Digests are copied into

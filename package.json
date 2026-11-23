@@ -1,0 +1,14 @@
+{
+  "name": "walk-through",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "A journey you write, a suite you compile.",
+  "scripts": {
+    "spec": "cucumber-js"
+  },
+  "devDependencies": {
+    "@cucumber/cucumber": "^13.3.0",
+    "@sddio/cli": "^0.3.2"
+  }
+}

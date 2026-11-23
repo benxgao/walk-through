@@ -1,0 +1,198 @@
+---
+card: walkthrough
+status: open
+phases:
+  - { id: P1, name: "One journey, compiled by hand once", code: "[x]", verified: "[x]" }
+  - { id: P2, name: "The compile verb and its rules", code: "[x]", verified: "[ ]" }
+  - { id: P3, name: "Install test in the consumer", code: "[ ]", verified: "[ ]" }
+  - { id: CL, name: "Close", code: "[ ]", verified: "[ ]" }
+next: "P2's verification, which is P3 — install in small-talk-agents, then three compiles of one journey"
+---
+
+# Progress: walkthrough
+
+## Baseline
+
+Measured 2026-11-23, before the first edit, in `small-talk-agents`. `walkthrough/` did not exist; the
+whole design lived in one chat and in `sddio_docs/adr/adr_100.md`.
+
+| Metric | Before | Command | Output |
+| --- | --- | --- | --- |
+| Files under `walkthrough/` | 0 | `find walkthrough -type f 2>/dev/null \| wc -l` | `0` |
+| Documents stating a product direction | 0 | `grep -rl '^## Not now' --include='*.md' AGENTS.md flow-trail sddio_docs walkthrough 2>/dev/null \| wc -l` | `0` |
+| Cards in `doing/` | 0 | `ls -d flow-trail/doing/*/ 2>/dev/null \| wc -l` | `0` |
+
+> Not measurable yet: how often a direction gets re-derived. The card's own trigger, so it cannot be
+> the baseline.
+>
+> The three zeroes carried to this repository on 2026-11-24: the card moved, the product did not exist
+> yet, and the numbers were still true on the other side of the move.
+
+## Phases
+
+Re-cut 2026-11-24, third time. The first cut was a recording system; the second compiled scenarios the
+moment a discussion settled; this one reverses the direction of generation — the journey is source, the
+specs are output — and adds the move: the product's home is its own repository, so P3 stops being an
+extraction drill and becomes an install.
+
+### P1 — One journey, compiled by hand once
+
+**Done 2026-11-24.** Seven stories about this product, one `.feature` written by hand from them, one
+scenario red for the right reason.
+
+**Files**: `walkthrough/journey.md`, `walkthrough/specs/a-journey-you-write.feature`,
+`walkthrough/tech.md`, `tests/steps/`.
+
+**Verify** (run, output recorded in `findings.md`):
+
+```bash
+grep -c '^### US-' walkthrough/journey.md                  # 7
+grep -h '^  Scenario' walkthrough/specs/*.feature | wc -l   # 7
+npx cucumber-js --dry-run                                   # 6 collected, 0 undefined, US-6 @skip
+npm run spec                                                # 5 passed, 1 failed — US-7
+```
+
+**Checklist**:
+
+- [x] **1.1 — every story is accounted for**: seven stories, `unaccounted = 0` passes, one `@refuse`
+  compiled to `@skip`. Counts are in the session note below, so the next compile has something to
+  differ against.
+- [x] **1.2 — the journey is one person in order**, four steps, and its prose carries what stories
+  cannot: the first minute, the week-later return, why a deletion has to leave a gap.
+- [x] **1.3 — `tech.md` names one runner, one language, and a step glossary** of six phrasings, plus
+  the twelve metrics those phrasings may name.
+- [x] **1.4 — the hand-written feature carries a note per place the compile was not obvious**: six
+  numbered notes in the header, and `F2` records that the first real compile deletes them.
+
+### P2 — The compile verb and its rules
+
+**Artifacts written 2026-11-24; not verified.** `walkthrough/AGENTS.md` (the admission test, four
+routes, three write tiers) and `walkthrough/skill/SKILL.md` (answer / compile / write, under thirty
+lines) exist. What does not exist is evidence: nothing has compiled a journey three times.
+
+**Verify** — becomes P3, because the compile only has a consumer's journey to work on:
+
+```bash
+/walkthrough compile        # report: 0 changed, 0 added, 1 refused, any todo
+git diff --stat walkthrough/specs/   # twice more: empty
+```
+
+**Checklist**:
+
+- [x] **2.1 — three compiles of an unchanged journey produce no diff.** *(code written; the three runs
+  are P3)*
+- [x] **2.2 — a changed `@then` changes one scenario**, and the report names the ID where a step
+  definition already referenced the old text. *(rule written; run is P3)*
+- [x] **2.3 — a story with no observable `@then` is reported, not compiled.** `F3` says the report is
+  the only place this is visible: the suite drops `@skip` scenarios before it runs.
+- [x] **2.4 — the compiler stays a skill verb with no program behind it.** The only code is
+  `tests/steps/`, which reads the folder and cannot write to it.
+
+### P3 — Install test in the consumer
+
+**Goal**: the install shape and the record, proved on the one consumer that exists.
+
+```bash
+cp -r walkthrough ../small-talk-agents/walkthrough     # the copy is the install
+ln -s <repo>/walkthrough/skill ~/.agents/skills/walkthrough
+ln -s ~/.agents/skills/walkthrough ~/.workbuddy-ai/skills/walkthrough
+```
+
+**Checklist**:
+
+- [ ] **3.1 — the skill fires from one door and is reachable by the other**: the `description` starts
+  it unasked once, and `/walkthrough` reaches it when it does not.
+- [ ] **3.2 — the copy runs where it lands**: `npm run spec` in the consumer collects the consumer's
+  scenarios after one config line changes, and nothing inside the folder had to move.
+- [ ] **3.3 — a person writes a journey before reading the rules.** This is `DISC-001`, and it has
+  been open since the card was a backlog page.
+- [ ] **3.4 — `kill_if` is judged** against `## Residual`: did any scenario go red before green?
+
+### CL — Close
+
+- [ ] Durable evidence moved to `findings.md`
+- [ ] `## Outcome` carries Before, After and Command
+- [ ] Every decision has a `## Decisions` row with its rejected alternative
+- [ ] `## Residual` written; "nothing" is valid, silence is not
+- [ ] `DISC-001` in `.sddio` resolved against what P1 and P3 actually did
+- [ ] Every earlier card this work used has a `usage.md` row; "none" is valid
+- [ ] `git rm flow-trail/doing/walkthrough/progress.md`
+- [ ] `git mv flow-trail/doing/walkthrough flow-trail/done/walkthrough`
+
+## Session notes
+
+### 2026-11-23 21:40 — opening
+
+- Did: card moved into `doing/`; baseline measured (three zeroes); four phases written from the
+  design chat, with `journey.md`, `landscape/tech.md` and a re-authored `rules/writing.md` folded in.
+- Verified by: none — nothing is built yet.
+- Used: `sddio_docs/adr/adr_100.md` (ADR-001) — the boundary rule became P2.3 and P4.4.
+- Tried and dropped: a fifth column for "assumptions" separate from ideas. Dropped because a belief
+  without a falsifier is exactly what `kill_if` already refuses; a second place to write it would
+  let it survive there.
+- Next: P1 — `AGENTS.md` and `rules/writing.md`.
+- Blocked on: none.
+
+### 2026-11-24 11:05 — the entry surface
+
+- Did: chose two doors over one. A `description` on a model-visible skill so it fires on its own, and
+  `/walkthrough` as the manual bypass for the days it does not. Both end at `walkthrough/AGENTS.md`;
+  the skill restates no rule. The file lives **inside** the folder at `walkthrough/skill/SKILL.md`.
+- Did: moved the skill from P1 to P2, correcting the previous session note. Its `description` is a
+  restatement of `direction.md`, so P1 would write it twice with the first copy a guess.
+- Verified by: `grep -A2 skillOverrides ~/.workbuddy-ai/settings.json` → `flow-trail` is
+  `user-invocable-only`, i.e. invisible to the model, so a skill in that mode can only ever be started
+  by a person typing it.
+- Tried and dropped: `user-invocable-only` as the only mode — it makes the record depend on the one
+  thing the folder exists to stop depending on.
+- Next: P1 — `AGENTS.md` and `rules/writing.md`.
+- Blocked on: none.
+
+### 2026-11-24 11:20 — the journey is the source, the suite is compiled
+
+- Did: inverted the generation. `journey.md` is hand-written prose carrying four markers; `specs/` is
+  compiled from it on command. Both earlier drafts generated the artifact a person reads, which is why
+  both rotted silently.
+- Did: wrote `walkthrough/rules/journey.md` — the source language, six rules. The load-bearing one is
+  "prose is never parsed": if the compiler needs it, it moves into a marker.
+- Tried and dropped: BDD's own `As a / I want / so that` as the source form. Nothing in it is
+  observable, so every scenario has to be invented afterwards.
+- Tried and dropped: `bin/compile.sh` with an ID map. The compiler is a skill verb; a program would
+  need its own tests and would put a build step back into a folder whose whole claim is that it has none.
+- Next: P1 — six stories about small-talk-agents, then one hand compile and read the diff.
+- Blocked on: one sentence about what the product is, and who the person in the journey is.
+
+### 2026-11-24 11:25 — renamed `walkthrough`, and the verb became `compile`
+
+- Did: renamed the folder and this card from `product-view` to `walkthrough`; the compile verb dropped
+  `bdd` for `compile` — a verb in a command names the act, and `bdd` names the format that comes out.
+- Why: the old name described a *view* of something that already exists, and that stopped being true the
+  moment the folder became the place the product is written down before it is built.
+- Verified by: `git status --short` showed the three card files as renames; `flow-trail-lint.sh` 0/0.
+
+### 2026-11-24 12:10 — the card moved house, and P1 is done
+
+- **Moved**: the three card files and `walkthrough/rules/journey.md` left `small-talk-agents` and
+  landed here, which is now the product's home (`sddio_docs/adr/adr_200.md`). The consumer keeps
+  nothing of it: `small-talk-agents` is the install test and, after that, a consumer.
+- **Installed**: `flow-trail 0.7.1` through its own bootstrap (board, `AGENTS.md` pointer, ignore
+  line) and `@sddio/cli 0.3.2` through `npm install --save-dev` + `sddio init --hook flow-trail
+  --no-install`. The hook is declared; the bootstrap had already run, so `init` did not fetch it twice.
+- **Wrote**: `journey.md` — seven stories, four steps, one person. Resolved the block of 11:20 by
+  making the person someone who has the product *in this repository*: a journey about a consumer
+  nobody has built produces seven reds and teaches nothing, and P1 asks for exactly one.
+- **Compiled by hand**: `specs/a-journey-you-write.feature`, one scenario per story, with six
+  numbered notes where the mapping was not mechanical (`F2`).
+- **Measured**: 7 stories, 6 collected scenarios (US-6 is `@refuse` → `@skip`), 24 steps, `5 passed,
+  1 failed` in 0.046s. The failure is US-7, "the compile runs again", and the error names the missing
+  behaviour rather than a missing step.
+- **Chose**: six step phrasings and twelve metrics, instead of one step per sentence. `tech.md` holds
+  the glossary; `tests/steps/metrics.js` holds the implementation, so adding a metric is a code change
+  and the vocabulary stays auditable.
+- Verified by: `npx cucumber-js --dry-run` (6, 0 undefined), `npm run spec` (1 red, on purpose),
+  `npx sddio start`, `flow-trail-lint.sh`.
+- Tried and dropped: keeping the small-talk journey here as the example. It is a document about a
+  product that does not exist, checked by a suite with nothing to read.
+- Next: P2's verification, which is P3 — install into `small-talk-agents`, write its journey, then
+  three compiles of one journey with no diff between them.
+- Blocked on: acceptance of the folder as it stands. The install test is the next session, by agreement.
