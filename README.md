@@ -110,6 +110,12 @@ Measured on `small-talk-agents`, 2026-11-24, against `v0.1.0`.
   disappears between compiles is the failure this folder exists to prevent.
 - **No CI shipped.** `npm run spec` is the whole loop; a gate on push is yours to wire.
 
+## Contributing
+
+A rule change is a change to what every consumer's copy means, so it starts as a story: the shape of
+a change, and what gets refused, is in [`CONTRIBUTING.md`](CONTRIBUTING.md). Issues use the templates;
+release history is in [`CHANGELOG.md`](CHANGELOG.md).
+
 ## License
 
 MIT. See [`LICENSE`](LICENSE).

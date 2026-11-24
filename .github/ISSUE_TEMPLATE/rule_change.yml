@@ -1,0 +1,38 @@
+name: A rule should change
+description: The format refuses something it should allow, or allows something it should refuse.
+title: "[rule] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        A rule change is a change to what every consumer's copy means, so it needs a story, not a
+        patch. Read `walkthrough/AGENTS.md` (the admission test) and `walkthrough/rules/journey.md`
+        (the six rules) first — most proposals fail the first one.
+  - type: textarea
+    id: want
+    attributes:
+      label: The want, as a story
+      description: One person, one want, one observable outcome. The shape of a `### US-n` heading in the journey.
+      placeholder: 'US-n · Wants to see which stories were reworded since the last compile'
+    validations:
+      required: true
+  - type: textarea
+    id: observable
+    attributes:
+      label: What a `@then` would name
+      description: A count, a comparison, or a string. If it cannot be one of the three, it is prose and the format will not compile it.
+      placeholder: 'reworded = 0'
+    validations:
+      required: true
+  - type: textarea
+    id: alternative
+    attributes:
+      label: What this rules out
+      description: Which existing rule, phrasing or file this replaces, and why the current one is worse. A proposal that adds without removing needs the stronger argument.
+    validations:
+      required: true
+  - type: textarea
+    id: cost
+    attributes:
+      label: What it costs a consumer
+      description: Who has to recompile, re-copy or re-learn something if this lands.

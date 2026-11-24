@@ -1,0 +1,45 @@
+name: Something is broken
+description: A command, a scenario or a claim in the documents does not hold.
+title: "[bug] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before filing: `npm install && npm run spec` on `master`, and paste what it printed.
+        A failing scenario usually names its own step definition, and that is faster than this form.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: The command you ran, the output, and what you expected instead.
+      render: shell
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version or commit
+      description: A tag (`v0.1.0`) or a commit SHA. `git describe --tags` prints it.
+      placeholder: v0.1.0
+    validations:
+      required: true
+  - type: dropdown
+    id: where
+    attributes:
+      label: Where
+      description: Which part of the repository the problem is in.
+      options:
+        - the suite (`walkthrough/specs/`, `tests/steps/`)
+        - the format (`walkthrough/rules/journey.md`, `walkthrough/AGENTS.md`)
+        - the journey (`walkthrough/journey.md`)
+        - the install (`README.md`)
+        - the skill (`walkthrough/skill/SKILL.md`)
+        - something else
+    validations:
+      required: true
+  - type: textarea
+    id: claim
+    attributes:
+      label: The claim that is false
+      description: If a document says something the repository does not do, quote the sentence and name the file.
+      placeholder: '`README.md` says the suite is green; `npm run spec` says 5 passed, 1 failed.'

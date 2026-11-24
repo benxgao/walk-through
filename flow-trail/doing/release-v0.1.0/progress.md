@@ -5,8 +5,9 @@ phases:
   - { id: P1, name: "US-7 becomes a refusal, and the suite goes green", code: "[x]", verified: "[x]" }
   - { id: P2, name: "The claims a reader can falsify in one command", code: "[x]", verified: "[x]" }
   - { id: P3, name: "The front page a stranger meets, and the version", code: "[x]", verified: "[x]" }
+  - { id: P4, name: "The rest of the storefront", code: "[ ]", verified: "[ ]" }
   - { id: CL, name: "Close", code: "[ ]", verified: "[ ]" }
-next: "CL — tag, repository page, usage row, then move the card to done/"
+next: "P4 — contributing, changelog, security, conduct, issue templates"
 ---
 
 # Progress: release-v0.1.0
@@ -101,6 +102,29 @@ grep -c '^## License' README.md               # 1
 - [x] **3.2 — the version is one a consumer can cite**, and `ADR-002`'s "record the version it
   copied" becomes executable.
 
+### P4 — The rest of the storefront
+
+**Goal**: the files GitHub's community profile asks for exist, and each says something only this
+repository could say.
+
+**Files**: `CONTRIBUTING.md`, `CHANGELOG.md`, `SECURITY.md`, `CODE_OF_CONDUCT.md` (create);
+`.github/ISSUE_TEMPLATE/bug_report.yml`, `.github/ISSUE_TEMPLATE/rule_change.yml` (create);
+`README.md` (modify) — one section pointing at them.
+
+**Verify**:
+
+```bash
+ls CONTRIBUTING.md CHANGELOG.md SECURITY.md CODE_OF_CONDUCT.md .github/ISSUE_TEMPLATE/*.yml
+gh api repos/benxgao/walk-through/community/profile --jq .health_percentage
+```
+
+**Checklist**:
+
+- [x] **4.1 — nothing is boilerplate**: the conduct page is reduced to what applies here, the
+  security page says what actually runs, and the second issue form asks for a `@then` because that is
+  where most proposals fail.
+- [x] **4.2 — the front page points at them**: `README.md` gained one section, not four.
+
 ### CL — Close
 
 - [ ] Durable evidence moved to `findings.md`
@@ -146,4 +170,19 @@ grep -c '^## License' README.md               # 1
 - Tried and dropped: keeping the `diff` metric for later use. No scenario may name it, so it is
   vocabulary nobody uses, and on a dirty tree it would pass while asserting nothing.
 - Next: CL — commit, tag `v0.1.0`, fill the repository page, then close.
+- Blocked on: none.
+
+### 2026-11-24 14:05 — P4, the rest of the storefront
+
+- Did: added `CONTRIBUTING.md`, `CHANGELOG.md`, `SECURITY.md`, `CODE_OF_CONDUCT.md`, and two issue
+  forms (`bug_report.yml`, `rule_change.yml`). Each is written against this repository: the
+  contributing page refuses a build step and a second summary of the journey, the security page lists
+  the actual attack surface (three dependencies and the steps a consumer writes), the conduct page is
+  reduced to "argue with the sentence", and the second form asks what a `@then` would name.
+- Verified by: `ls` of the five files; `gh api repos/benxgao/walk-through/community/profile` before
+  and after (see `findings.md`).
+- Used: none.
+- Tried and dropped: a `docs/` site. The repository is the documentation, and a second copy of it
+  would drift from the one the suite reads.
+- Next: CL.
 - Blocked on: none.
