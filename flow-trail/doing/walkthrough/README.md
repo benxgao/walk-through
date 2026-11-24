@@ -24,6 +24,8 @@ one that is red is the part nobody has built.
 | Scenarios the runner collects | 0 | 6 | `npx cucumber-js --dry-run` | 6 scenarios, 0 undefined steps |
 | Scenarios that failed before they passed | 0 | 1 red, 0 recovered | `npm run spec` | `5 passed, 1 failed`, naming US-7 |
 | Step phrasings a person must learn | n/a | 6 | `sed -n '/^## Step glossary/,/^## What/p' walkthrough/tech.md \| grep -c '^\| \`'` | `<= 10` |
+| A consumer collects its suite after installing | n/a | 5 scenarios, 20 undefined steps | `npx cucumber-js --dry-run` in `small-talk-agents` | collected; the undefined list is the worklist |
+| Change one `@then`, recompile | n/a | 2 lines, one scenario | `diff` the two specs | no other story moves |
 
 ## Contract
 
@@ -37,8 +39,9 @@ What must hold whenever someone reads the folder, not what was intended at the s
    This is what makes a re-compile a diff rather than a rewrite.
 4. **`@then` names a count, a comparison, or a string.** Prose is never parsed. If a step definition
    would have to guess, the line is judgement parked in a marker.
-5. **Unapproved is `@draft`.** Empty `approved:` still compiles, and CI ignores the result. Iteration
-   never blocks; nothing counts until someone says ok.
+5. **Unapproved is `@draft`.** Empty `approved:` still compiles, and iteration never blocks; nothing
+   counts the result until someone approves it. A runner that means to gate filters `@draft` out, and
+   there is no CI here to do it.
 6. **Nothing is written outside the folder.** The runner reads in; the folder writes nowhere. The
    folder is copied into a consumer as-is, and the copy is the install.
 
@@ -59,6 +62,7 @@ What must hold whenever someone reads the folder, not what was intended at the s
 | The product's home is its own repository; a consumer copies the folder | A card in another repository is a card about that repository, and every path in the folder was escaping into a consumer's tree | Submodule, npm package, or keep the card where it was | `sddio_docs/adr/adr_200.md` |
 | The first journey is this product, not the consumer's | P1 asks for one scenario failing for the right reason. A journey about a product nobody has built fails seven times and teaches nothing | Keep the small-talk-agents journey here as the example | the red US-7, and a suite that reads this folder |
 | Six step phrasings, and a metric vocabulary behind them | A hand compile is how we learn what a compiler must preserve; six phrasings and twelve metrics were enough for seven stories, and every extra one is a step definition nobody reuses | One step per sentence, in prose | `walkthrough/tech.md` |
+| The install is a copy, three deletions and one pointer | The folder holds the product *and* this repository's instance side by side, so the copy carries both; and nothing outside the folder says the folder exists, so one section of the consumer's `AGENTS.md` has to. A `walkthrough-template/` beside it would be a second tree to keep in step, which is the drift this card exists to prevent | A template directory, or a `walkthrough init` command | the install section in the repository `README.md` |
 
 ## Lessons
 
@@ -73,22 +77,35 @@ What must hold whenever someone reads the folder, not what was intended at the s
   story's. That reads like copy-paste in a `.feature`, and it is the format working.
 - **A `@refuse` story is silence in the suite.** It compiles to a `@skip` scenario whose only content
   is a reason, so the suite cannot prove the refusal — only that someone still remembers it.
+- **The copy is not the product.** The install brought seven files and only four of them were the
+  product; the other three were this repository's journey, its spec and its decision. Nothing in the
+  consumer's run notices a stale one. `F4` has the count.
+- **A fresh install ends undefined, not green.** Twenty steps in the consumer were undefined on the
+  first collection, and that list — not a passing suite — is what the folder hands over.
 
 ## Residual
 
 - **`kill_if`** — two weeks of real product work with no scenario that failed before it passed: this
   is documentation with extra steps, and the folder should be deleted rather than grown.
-- **The compile verb is the product and it does not exist.** US-7 is red for that reason and is the
-  only thing keeping the promise honest; a US-7 that goes green because someone hand-edited `specs/`
-  is the failure mode to watch.
+- **The compile verb is the product and it does not exist.** US-7 carries that as a refusal, not a
+  red: no step definition can perform a skill, so the second compile is checked by a drill, recorded
+  in `walkthrough/decisions/2026-11-24-the-second-compile-is-a-drill.md`. The failure mode to watch
+  is hand-editing `specs/` to make a scenario pass, and the Outcome row above still records what P1
+  measured while US-7 was red.
 - **Every scenario is `@draft`**, so nothing counts yet. The first approved journey is the first time
   this suite is binding, and nobody has run that experiment.
-- **Re-compile churn is unmeasured.** Rule 3 states it; nothing enforces it until P2 runs three times
-  over an unchanged journey.
+- **Re-compile churn is proved once, by a person.** The drill moved one changed `@then` into two
+  lines and left every other story byte-identical. That is a model following a rule, not a program
+  enforcing one: three sessions writing the same story still have nothing but this rule between them.
 - **A consumer's copy can drift** from this repository, and the compile diff is the only guard.
-- **The skill is installed nowhere.** It lives in `walkthrough/skill/` and needs two symlinks before
-  `/walkthrough` exists; nothing checks them, and a fresh clone looks identical to a working one.
-- **The install test has not run.** It is the next card, and it is what P3's extraction drill becomes.
+- **The skill's firing is untested.** Two symlinks exist and `SKILL.md` reads from both; whether the
+  `description` starts the skill, and whether `/walkthrough` reaches it, needs a session restart to
+  answer. Nothing checks either link.
+- **`kill_if` needs a fortnight**, and the clock starts at the first consumer journey. As of today
+  the only red-then-green candidate is US-7, and it has not gone green.
+- **The consumer's journey is a draft written by the agent** from the format's own example, so
+  checklist 3.3 — a person writing one *before* reading the rules — is still unproven. The owner
+  overwriting `small-talk-agents/walkthrough/journey.md` is the experiment.
 
 ## Where the proof lives
 

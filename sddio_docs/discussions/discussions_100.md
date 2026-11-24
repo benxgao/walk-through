@@ -19,4 +19,7 @@ refs: [ADR-001, ADR-002]
   question becomes whether a person can write a journey without reading them.
 - What would settle it: the install test. One journey written in a consumer repository, before that
   person reads `rules/journey.md`, then the compile.
+- The install test ran 2026-11-24 and did **not** settle it: the journey installed in
+  `small-talk-agents` was written by the agent, which had read the rules twice that morning. The
+  experiment needs the owner's own first pass.
 - Not in the code: nothing records what a person read before they wrote their first story.

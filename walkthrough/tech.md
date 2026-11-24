@@ -17,13 +17,15 @@ nothing is a preference, not a choice.
 | Node + ESM, no tsc | a clone runs the suite with `npm install && npm run spec` | type checking as a gate; the scenarios stay text  |
 | Steps in `tests/`  | one place to read what a marker means                     | step code inside `walkthrough/`, which is copied  |
 
-- `npm run spec` is the whole loop. There is no watch mode, no reporter config, no CI wiring yet.
+- `npm run spec` is the whole loop. There is no watch mode, no reporter config and no CI: nothing
+  runs this suite on push, and a consumer who wants that gate wires it themselves.
 - A scenario tagged `@skip` is excluded by `tags: 'not @skip'` — that is how `@refuse` stays visible
-  without being built. A scenario tagged `@draft` still runs locally and is what CI will ignore.
+  without being built. A scenario tagged `@draft` still runs here; it marks "not yet approved", and a
+  runner that means to gate on approval filters it out.
 
 ## Step glossary
 
-Six phrasings, and no seventh without deleting one. The glossary exists because three sessions will
+Five phrasings, and no sixth without deleting one. The glossary exists because three sessions will
 otherwise write three wordings for one check, and every wording is a step definition nobody reuses.
 
 | Phrasing                                                     | Means                                              |
@@ -32,7 +34,6 @@ otherwise write three wordings for one check, and every wording is a step defini
 | `Given specs compiled once`                                   | at least one `.feature` under `specs/`             |
 | `Given the journey has not changed since the last compile`     | a compile left specs behind, and the person says nothing moved |
 | `When I read <path>`                                          | the file is read; the `Then` lines do the checking  |
-| `When the compile runs again`                                 | the compile verb — not built yet, so this step fails on purpose |
 | `Then <metric> <op> <value>`                                  | `=`, `>=`, `<=`; a number, `true`/`false`, or another metric |
 
 ## What `<metric>` may be
@@ -53,11 +54,10 @@ is a code change in `tests/steps/metrics.js`, which is the point: the vocabulary
 | `runner`        | `- Runner:` lines in this file                            |
 | `phrasings`     | rows of the step glossary above                           |
 | `spec_scenarios`| `Scenario:` lines under `walkthrough/specs/`              |
-| `diff`          | changed lines under `walkthrough/specs/` after a compile  |
 
 ## Why not BDD's own tooling defaults
 
-- No `cucumber.yml` per environment, no `world` hierarchy, no custom formatter: the suite is six
+- No `cucumber.yml` per environment, no `world` hierarchy, no custom formatter: the suite is seven
   scenarios and one machine, and every layer added here is a layer a reader has to learn before they
   can check a claim.
 - No test double, no fixture. A scenario about a folder reads the folder — the repository is the

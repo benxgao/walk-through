@@ -6,7 +6,6 @@
  * use stays short enough to audit, and a story cannot invent a check nobody implements.
  */
 
-import { execFileSync } from 'node:child_process';
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 
@@ -73,12 +72,6 @@ const specScenarios = () =>
     .filter((name) => name.endsWith('.feature'))
     .reduce((total, name) => total + count(read(join(SPECS, name)), /^\s*Scenario:/gm), 0);
 
-const diff = () => {
-  const out = execFileSync('git', ['diff', '--numstat', '--', SPECS], { cwd: ROOT, encoding: 'utf8' });
-
-  return out.trim() === '' ? 0 : out.trim().split('\n').length;
-};
-
 const METRICS = {
   routes: () => count(read(AGENTS), /^\| (read|write|compile|decide)\b/gm),
   lines: () => read(AGENTS).trimEnd().split('\n').length,
@@ -91,7 +84,6 @@ const METRICS = {
   runner: () => count(read(TECH), /^- Runner:/gm),
   phrasings: () => count(section(read(TECH), 'Step glossary'), /^\| `/gm),
   spec_scenarios: specScenarios,
-  diff,
 };
 
 export function metric(name) {

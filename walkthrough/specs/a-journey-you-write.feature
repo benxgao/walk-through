@@ -1,18 +1,4 @@
-# Compiled from walkthrough/journey.md by hand, 2026-11-24. This file is output: edit the journey.
-# US-7 is red on purpose — it is the compile verb, which P2 of the card builds.
-#
-# Notes for the compiler (P2). Each marks a place where this hand pass was not mechanical:
-#   1. @state becomes every story's Given. Two stories in one step share a first line; that is the
-#      format working, not a copy-paste slip.
-#   2. @then lines compile whole, `metric op value` included. Nothing is paraphrased into "Then the
-#      folder names four routes" — the marker is already the sentence a step definition matches.
-#   3. The story ID becomes a tag, `@us-<n>`, never part of the title. A re-worded story then keeps
-#      its tag and the diff is one line instead of a delete and an insert.
-#   4. @refuse becomes a @skip scenario whose only content is the reason, in a comment the runner
-#      does not read. A refused want with steps would be a scenario somebody could implement.
-#   5. approved: is empty, so every scenario carries @draft. The compiler decides that, not the writer.
-#   6. These notes will not survive a compile. Whoever writes P2 has to decide whether the header is
-#      regenerated from the journey or whether the notes belong in P2's own rules instead.
+# Compiled from walkthrough/journey.md, 2026-11-24. This file is output: edit the journey.
 @walkthrough @journey
 Feature: A journey you write, a suite you compile
 
@@ -59,8 +45,11 @@ Feature: A journey you write, a suite you compile
     # scenario.
     Given a walkthrough folder
 
-  @us-7 @draft
+  @us-7 @draft @skip
   Scenario: US-7 Wants the second compile to cost nothing to read
+    # @refuse the compile has no program behind it — it is a skill a person or a model performs, so no
+    # step definition can run it a second time and diff the result. The check is the drill recorded in
+    # walkthrough/decisions/: emit, emit again unchanged, change one @then, emit a third time.
+    # Measured there: 0 scenario lines moved, 15 header comment lines gone. A compiled scenario would
+    # be a green that proves nothing.
     Given the journey has not changed since the last compile
-    When the compile runs again
-    Then diff = 0

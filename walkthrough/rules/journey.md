@@ -7,7 +7,7 @@ are for the compiler. Nothing else is parsed — that line is the whole design.
 
 ````markdown
 ---
-approved:            # a date, or empty. Empty compiles to @draft, which CI ignores.
+approved:            # a date, or empty. Empty compiles to @draft: nothing counts it until someone approves.
 person: 第一次来的人
 ---
 
@@ -75,7 +75,11 @@ act, not the format — `bdd` is the thing that comes out, `compile` is the thin
 - The report is three lists — added, changed, refused or todo — plus any scenario whose text changed
   while its ID was already referenced by a step definition. Those are listed for review, never
   silently swapped.
-- With `approved:` empty the compile still runs, but every scenario is tagged `@draft` and CI ignores it.
+- With `approved:` empty the compile still runs, but every scenario is tagged `@draft`: it marks a
+  want nobody has approved yet. A runner that means to gate filters `@draft` out; this repository
+  runs none, so nothing here counts.
+- The header is regenerated on every compile — one provenance line, no notes. Anything the compiler
+  must not lose belongs in these rules, because `specs/` is the one place it cannot live.
 
 ## Why this shape and not BDD's own
 

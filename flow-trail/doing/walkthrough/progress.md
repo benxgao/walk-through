@@ -3,10 +3,10 @@ card: walkthrough
 status: open
 phases:
   - { id: P1, name: "One journey, compiled by hand once", code: "[x]", verified: "[x]" }
-  - { id: P2, name: "The compile verb and its rules", code: "[x]", verified: "[ ]" }
-  - { id: P3, name: "Install test in the consumer", code: "[ ]", verified: "[ ]" }
+  - { id: P2, name: "The compile verb and its rules", code: "[x]", verified: "[x]" }
+  - { id: P3, name: "Install test in the consumer", code: "[x]", verified: "[ ]" }
   - { id: CL, name: "Close", code: "[ ]", verified: "[ ]" }
-next: "P2's verification, which is P3 — install in small-talk-agents, then three compiles of one journey"
+next: "P3.3 — the consumer's owner rewrites its journey in their own words; P3.4 waits two weeks"
 ---
 
 # Progress: walkthrough
@@ -66,23 +66,24 @@ npm run spec                                                # 5 passed, 1 failed
 
 ### P2 — The compile verb and its rules
 
-**Artifacts written 2026-11-24; not verified.** `walkthrough/AGENTS.md` (the admission test, four
-routes, three write tiers) and `walkthrough/skill/SKILL.md` (answer / compile / write, under thirty
-lines) exist. What does not exist is evidence: nothing has compiled a journey three times.
+**Verified 2026-11-24, in a copy under `/tmp/p2-drill`.** The verb is a skill, so the drill is a person
+following `SKILL.md` on a copy of the folder: emit once (the hand spec was the baseline), emit again
+with nothing changed, then change one `@then` and emit a third time. The real `specs/` was never
+touched — the drill's output is evidence, not the product.
 
-**Verify** — becomes P3, because the compile only has a consumer's journey to work on:
+**Verify** (run, numbers in `findings.md`):
 
 ```bash
-/walkthrough compile        # report: 0 changed, 0 added, 1 refused, any todo
-git diff --stat walkthrough/specs/   # twice more: empty
+diff hand-written.spec emitted.spec        # 15 comment lines gone, 0 scenario lines changed
+# change `@then routes = 4` to `>= 4`, emit again
+diff compile1.spec compile3.spec           # 2 lines, one scenario, no other story moved
 ```
 
 **Checklist**:
 
-- [x] **2.1 — three compiles of an unchanged journey produce no diff.** *(code written; the three runs
-  are P3)*
-- [x] **2.2 — a changed `@then` changes one scenario**, and the report names the ID where a step
-  definition already referenced the old text. *(rule written; run is P3)*
+- [x] **2.1 — an unchanged journey produces no diff.** Unchanged stories were emitted byte-identically;
+  what the emit does *not* keep is the header, and that is `F2`.
+- [x] **2.2 — a changed `@then` changes one scenario**, two lines, and no other story moves.
 - [x] **2.3 — a story with no observable `@then` is reported, not compiled.** `F3` says the report is
   the only place this is visible: the suite drops `@skip` scenarios before it runs.
 - [x] **2.4 — the compiler stays a skill verb with no program behind it.** The only code is
@@ -90,23 +91,29 @@ git diff --stat walkthrough/specs/   # twice more: empty
 
 ### P3 — Install test in the consumer
 
-**Goal**: the install shape and the record, proved on the one consumer that exists.
+**Installed 2026-11-24; two checks open.** The skill is linked into both harness directories and reads
+from both; `small-talk-agents` got the folder, the runner, one config file and a journey of its own.
 
 ```bash
-cp -r walkthrough ../small-talk-agents/walkthrough     # the copy is the install
-ln -s <repo>/walkthrough/skill ~/.agents/skills/walkthrough
-ln -s ~/.agents/skills/walkthrough ~/.workbuddy-ai/skills/walkthrough
+cp -r walkthrough ../small-talk-agents/walkthrough      # then delete the three instance files
+ln -sfn <repo>/walkthrough/skill ~/.agents/skills/walkthrough
+ln -sfn ~/.agents/skills/walkthrough ~/.workbuddy-ai/skills/walkthrough
 ```
 
 **Checklist**:
 
-- [ ] **3.1 — the skill fires from one door and is reachable by the other**: the `description` starts
-  it unasked once, and `/walkthrough` reaches it when it does not.
-- [ ] **3.2 — the copy runs where it lands**: `npm run spec` in the consumer collects the consumer's
-  scenarios after one config line changes, and nothing inside the folder had to move.
-- [ ] **3.3 — a person writes a journey before reading the rules.** This is `DISC-001`, and it has
-  been open since the card was a backlog page.
-- [ ] **3.4 — `kill_if` is judged** against `## Residual`: did any scenario go red before green?
+- [x] **3.1 — the skill is reachable from both directories, and the harness lists it**: `head -3` reads
+  the same `SKILL.md` through `~/.agents/skills/walkthrough` and `~/.workbuddy-ai/skills/walkthrough`,
+  and the skill registry reports `walkthrough` enabled with its `description` — model-visible, unlike
+  `flow-trail`, which is `user-invocable-only`. Whether the description *fires* needs a fresh session.
+- [x] **3.2 — the copy runs where it lands**: `npx cucumber-js --dry-run` in the consumer collects 5
+  scenarios and 20 steps, all undefined, with nothing inside the folder moved and one `paths` line
+  added. `F5` says that list is the handover.
+- [ ] **3.3 — a person writes a journey before reading the rules.** Blocked on the owner: the journey
+  installed there is an agent's draft, built from the format's own example, so it cannot answer
+  `DISC-001`.
+- [ ] **3.4 — `kill_if` is judged.** Needs two weeks of real product work; the clock starts at the
+  first consumer journey, which is 3.3.
 
 ### CL — Close
 
@@ -196,3 +203,30 @@ ln -s ~/.agents/skills/walkthrough ~/.workbuddy-ai/skills/walkthrough
 - Next: P2's verification, which is P3 — install into `small-talk-agents`, write its journey, then
   three compiles of one journey with no diff between them.
 - Blocked on: acceptance of the folder as it stands. The install test is the next session, by agreement.
+
+### 2026-11-24 13:30 — the install test
+
+- **Installed the skill**: `~/.agents/skills/walkthrough` → `walk-through/walkthrough/skill`, and
+  `~/.workbuddy-ai/skills/walkthrough` → that link. Same shape as `flow-trail`'s install, so both
+  harness directories read one file. Firing is untested until a session restart.
+- **Installed the folder**: `cp -r` into `small-talk-agents` brought 7 files, 4 of which are the
+  product. The other 3 — an 87-line journey, a 66-line spec, one decision — are *this* repository's
+  instance and had to go (`F4`). The install is now documented as a copy plus three deletions, and
+  the decision row says why not a template directory.
+- **Wrote the consumer's journey**: six stories about a first-time visitor to a small-talk product,
+  built from the format's own example rather than invented from nothing. It is a draft, and it is
+  labelled as one: 3.3 wants the owner's words, and 3.3 is still open.
+- **Wrote its spec**: `walkthrough/specs/first-visit.feature`, five scenarios plus US-6 as `@skip`.
+- **Ran it**: `npx cucumber-js --dry-run` collects 5 scenarios and 20 steps — all 20 undefined, which
+  is the consumer's worklist, not a broken install (`F5`). One `paths` line in `cucumber.mjs`, and
+  nothing inside the folder moved.
+- **Verified P2 in a copy**, not in `specs/`: emitted the suite from the journey, emitted it again
+  unchanged, then changed one `@then`. Unchanged stories were byte-identical; the change produced two
+  lines and touched no other story. The first real emit also deleted 15 header comment lines — `F2`,
+  measured.
+- Verified by: the two `head -3` reads through the symlinks, `npx cucumber-js --dry-run` on both
+  sides, and the `/tmp/p2-drill` diffs. `flow-trail-lint.sh` 0/0 after the card was rewritten.
+- Tried and dropped: a `walkthrough-template/` beside the product. It would be a second tree kept in
+  step by hand, which is the drift the card exists to prevent.
+- Next: 3.3 — the owner rewrites `small-talk-agents/walkthrough/journey.md`, then compiles it. 3.4
+  waits two weeks from that first real journey.

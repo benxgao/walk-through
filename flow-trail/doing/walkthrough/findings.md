@@ -74,6 +74,48 @@ that has stopped mattering can be found and retired instead of outliving its use
   `npx cucumber-js --dry-run | grep 'scenarios ('` reports 6; the difference must equal
   `grep -c '^@refuse' walkthrough/journey.md`, which is 1.
 
+## F4 — The copy is not the install
+
+- **Saw** (2026-11-24, install into `small-talk-agents`) — `cp -r` landed 7 files. Four are the
+  product (`AGENTS.md`, `rules/`, `tech.md`, `skill/`); three are this repository's instance: an
+  87-line `journey.md` about walk-through itself, a 66-line spec compiled from it, and one decision.
+  Deleting those three and writing the consumer's own journey left 6 files.
+- **Saw** — after the copy, the consumer's `AGENTS.md` said nothing about the folder. `flow-trail`'s
+  installer writes its own pointer for exactly this reason, and a `description` is read only if the
+  agent looks. The install now ends with that pointer, and it is the fourth step in the `README`.
+- **Means** — "the copy is the install" holds only after three deletions *and* one addition, none of
+  which the folder can do for itself. A copy that keeps the old spec ends up with two `.feature` files,
+  and a copy with no pointer is found only on the days the description happens to fire.
+- **Cost if unknown** — the consumer's run goes green or red for reasons unrelated to their product,
+  and the first thing they debug is someone else's journey. The check that would catch it here —
+  `spec_scenarios = stories` — is a story about the folder, and a consumer's journey has no reason to
+  carry it.
+- **Not in the code because** — nothing marks which files are the product and which are this
+  repository's instance, and nothing outside the folder says the folder exists. The difference is a
+  decision someone made, and it is not in a file.
+- **Cited by** — the install section in the repository `README.md`, and the decision row that names
+  the three deletions.
+- **Check** — in a consumer, `ls walkthrough/specs/*.feature | wc -l` is 1,
+  `grep -c '^### US-' walkthrough/journey.md` matches that spec's scenario count, and
+  `grep -c 'walkthrough/journey.md' AGENTS.md` is 1. Two feature files, a story count that only makes
+  sense for another product, or a zero, means the install is half done.
+
+## F5 — A fresh consumer's suite is undefined, and that list is the deliverable
+
+- **Saw** (2026-11-24, `small-talk-agents`) — `npx cucumber-js --dry-run` collects 5 scenarios and
+  20 steps, all 20 undefined; cucumber prints the snippet for each. Nothing in the folder had to move
+  and the config was one `paths` line.
+- **Means** — the install proves *collection*, not execution. "A suite that runs" is the consumer's
+  own work, done beside their code; what the folder hands over at install time is the shape and the
+  list of steps that do not exist.
+- **Cost if unknown** — a reader expecting green after install reads the undefined report as a broken
+  install, and starts repairing the folder instead of writing the product.
+- **Not in the code because** — no file states what a fresh install should look like. The repository
+  README says it now, in one sentence, and that sentence is the only place it is written down.
+- **Cited by** — the install section in the repository `README.md`, and P3.2 in the progress file.
+- **Check** — `npx cucumber-js --dry-run | grep 'steps ('` reports the same undefined count as
+  `npm run spec`; a zero means the consumer has written its steps, which is the next card, not this one.
+
 ## Receipts
 
 | What | Command | Output | Date |
@@ -86,3 +128,7 @@ that has stopped mattering can be found and retired instead of outliving its use
 | Scenarios the runner collects | `npx cucumber-js --dry-run` | `6 scenarios`, `0 undefined` | 2026-11-24 |
 | What a run costs | `npm run spec` | `5 passed, 1 failed`, `0.046s` | 2026-11-24 |
 | Stories nobody can compile | `grep -c '^@refuse' walkthrough/journey.md` | `1` | 2026-11-24 |
+| What the copy brings | `find walkthrough -type f \| wc -l` in the consumer, before deletions | `7` — 4 product, 3 instance | 2026-11-24 |
+| What a fresh consumer's run says | `npx cucumber-js --dry-run` in `small-talk-agents` | `5 scenarios`, `20 steps (20 undefined)` | 2026-11-24 |
+| One changed `@then`, one compile | `diff` compile 1 against compile 3 | `2` lines, one scenario, no other story moved | 2026-11-24 |
+| What the first real compile costs | `diff` hand-written spec against the emitted one | `15` comment lines gone, `0` scenario lines changed | 2026-11-24 |

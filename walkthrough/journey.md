@@ -1,5 +1,5 @@
 ---
-approved: # a date, or empty. Empty compiles to @draft, which CI ignores.
+approved: # a date, or empty. Empty compiles to @draft: nothing counts it until someone approves.
 person: someone who can say what the product is out loud, and cannot find it in the repository
 ---
 
@@ -79,9 +79,11 @@ suite has to be the journey, not a copy of it that someone keeps in step by hand
 A week later nothing has changed. The compile runs again, and the answer has to be identical to the
 last one — or the diff is noise, and a diff nobody reads cannot be a review.
 
+Nothing in this suite can run the compile twice: the compile is a skill, not a program. The check is
+a drill instead, and its number is in `decisions/`.
+
 @state the journey has not changed since the last compile
 
 ### US-7 · Wants the second compile to cost nothing to read
 
-@when the compile runs again
-@then diff = 0
+@refuse the compile has no program behind it — it is a skill a person or a model performs, so no step definition can run it a second time and diff the result. The check is the drill recorded in decisions/: emit, emit again unchanged, change one @then, emit a third time. Measured there: 0 scenario lines moved, 15 header comment lines gone. A compiled scenario would be a green that proves nothing.
