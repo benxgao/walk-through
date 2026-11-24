@@ -8,19 +8,21 @@ Detail behind these conclusions: [`findings.md`](./findings.md).
 
 ## Outcome
 
-Planned, not closed. Three sentences at most: the suite goes green by turning the one unbuildable
-story into a refusal, the count a reader can check in one command is the count that is written, and
-`v0.1.0` names the state so a consumer's copy can be attributed.
+Published 2026-11-24 as `v0.1.0`. The suite is green because the one story no program could satisfy
+is refused with its reason instead of failing, the counts a reader can check in one command are the
+counts that are written, and the front page says what the tool is, how to install it, and what it
+will not do.
 
 | Metric | Before | After | Command | Verify |
 | --- | --- | --- | --- | --- |
 | Suite on a fresh clone | 5 passed, 1 failed | 5 passed, 0 failed | `npm run spec` | `npm run spec \| grep -q '5 passed'` |
 | Refused stories | 1 | 2 | `grep -c '^@refuse' walkthrough/journey.md` | `= 2` |
 | Lines that name a CI | 6 | 0 | `grep -rn 'CI ignores\|CI will ignore\|CI wiring' --include='*.md' walkthrough README.md \| wc -l` | `= 0` |
-| Phrasing count written down | 5 places, two numbers | 5 places, one number | `grep -rn 'nine phrasings' tests walkthrough README.md \| wc -l` | `= 0` |
+| Phrasing count written down | 6 in `tech.md`, 9 in `steps.js` | 5 in both | `grep -c '^\| `' <(sed -n '/^## Step glossary/,/^## What/p' walkthrough/tech.md)` | `= 5` |
 | Package version | 0.0.0 | 0.1.0 | `node -p "require('./package.json').version"` | `= 0.1.0` |
 | Tags | 0 | 1 | `git tag \| wc -l` | `>= 1` |
 | Repository description | empty | one sentence | `gh repo view --json description -q .description` | non-empty |
+| Storefront files | 1 (README) + LICENSE | 6 + two issue forms | `ls CONTRIBUTING.md CHANGELOG.md SECURITY.md CODE_OF_CONDUCT.md` | all present |
 
 ## Contract
 
