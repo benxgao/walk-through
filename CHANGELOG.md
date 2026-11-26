@@ -3,6 +3,23 @@
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versioning: `MAJOR.MINOR.PATCH`,
 where a rule change is a `MAJOR` for every consumer copy already in the wild.
 
+## [Unreleased]
+
+### Fixed
+
+- The install's `cucumber.mjs` was missing `import: ['tests/steps/**/*.js']`, so a consumer who
+  followed it wrote step definitions cucumber never loaded and every step stayed undefined forever.
+  Verified: with the line removed, a repository with four working steps reports `4 undefined`.
+- The install assumed a sibling checkout and a `spec` script that `npm init` does not create. Both are
+  now commands in step 1 and 2.
+
+### Changed
+
+- `README.md` reordered as the path a stranger walks: what it is with one story and its scenario,
+  `npm run spec` in this repository, five install steps with a "you are done when" table, then the
+  day-to-day verbs and the format. The skill link moved into step 2, where `/walkthrough compile` is
+  first used, and now names the skill directories agents actually read.
+
 ## [0.1.0] — 2026-11-24
 
 The first version a consumer can record. Measured: 7 stories, 5 scenarios that run, 2 refusals with
